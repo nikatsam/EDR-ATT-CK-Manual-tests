@@ -11,7 +11,7 @@ echo //////// ///////   //     //       //     //////// ////////      //
 
 echo Starting in 10s
 
-echo timeout 10
+timeout 10
 
 
 echo %time% %date%: [+] T1140 - Decoding AllTheThings.dll file with Certutil  
